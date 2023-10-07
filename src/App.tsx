@@ -1,6 +1,33 @@
 import { useMemo, useState } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
+import { ToastContainer } from 'react-toastify';
+import {
+  CasperProvider,
+  createClient,
+  CasperDashConnector
+} from '@casperdash/usewallet';
 import './App.css'
+import TugOfWarGameContainer from './components/TugOfWar/TugOfWarGameContainer';
+import TugOfWarGame from './components/TugOfWar/TugOfWarGame';
+
+const client = createClient({
+  connectors: [
+    new CasperDashConnector(),
+  ],
+  autoConnect: true,
+});
+
+const sharedToastProps: any = {
+  position: 'bottom-left',
+  autoClose: 2500,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'dark',
+  className: 'eggForce-toast--container',
+};
 
 function App() {
   const url = "wss://stream.binance.com:9443/ws/btcusdt@kline_1s";
@@ -35,6 +62,12 @@ function App() {
 
   return (
     <>
+      <CasperProvider client={client}>
+        <ToastContainer {...sharedToastProps} />
+        <TugOfWarGameContainer>
+          <TugOfWarGame />
+        </TugOfWarGameContainer>
+      </CasperProvider>
       <div>
         <h3>
           <strong>{data}</strong>
@@ -52,8 +85,8 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-      <button onClick={() => setStarted(true)}>Start</button>
-      <button onClick={() => setStarted(false)}>Stop</button>
+      {/* <button onClick={() => setStarted(true)}>Start</button> */}
+      {/* <button onClick={() => setStarted(false)}>Stop</button> */}
     </>
   )
 }
