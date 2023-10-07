@@ -16,7 +16,6 @@ const useTugOfWar = () => {
   const buildBettingSideDeploy = useCallback(
     (args: any) => async () => {
       try {
-        // TODO: build deploy
         const runtimeArgs = RuntimeArgs.fromMap({
           option: args.option
         });
