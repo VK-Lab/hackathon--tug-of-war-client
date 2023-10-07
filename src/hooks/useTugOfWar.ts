@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { CLPublicKey, RuntimeArgs } from "casper-js-sdk";
+import { CLPublicKey, CasperClient, RuntimeArgs, Contracts, CLValueBuilder } from "casper-js-sdk";
 import API from '../services/api';
 import axios from '../services/axios';
 import { useStore } from "../components/TugOfWar/TugOfWarGameContainer";
@@ -16,21 +16,34 @@ const useTugOfWar = () => {
   const buildBettingSideDeploy = useCallback(
     (args: any) => async () => {
       try {
+        console.log(`🚀 ~ args:`, args)
         const runtimeArgs = RuntimeArgs.fromMap({
-          option: args.option
+          option: CLValueBuilder.u8(args.option)
         });
 
         // Set contract before calling callEntryPoint
-        contracService.contract.setContractHash(`hash-${args.contract}`);
+        console.log(`🚀 ~ contracService:`, contracService)
+        contracService.contract.setContractHash(args.contract);
 
         // Build Merge deploy
-        const deploy = contracService.contract.callEntrypoint(
-          'bet',
+        // const deploy = contracService.contract.callEntrypoint(
+        //   'bet',
+        //   runtimeArgs,
+        //   CLPublicKey.fromHex(args.key),
+        //   configs.CHAIN_NAME,
+        //   String(args.paymentAmount),
+        // );
+        const casperClient = new CasperClient(configs.NODE_ADDRESS);
+        const contractClient = new Contracts.Contract(casperClient);
+        contractClient.setContractHash(configs.TOKEN_CONTRACT_HASH);
+        const deploy = await contractClient.callEntrypoint(
+          "bet",
           runtimeArgs,
           CLPublicKey.fromHex(args.key),
-          configs.CHAIN_NAME,
-          String(args.paymentAmount),
-        );
+            configs.CHAIN_NAME,
+            String(args.paymentAmount),
+        )
+        console.log(`🚀 ~ deploy:`, deploy)
 
         return deploy;
       } catch (error: any) {
@@ -50,18 +63,22 @@ const useTugOfWar = () => {
     dispatch({ type: "ENABLE_COUNTDOWN"});
     const dataBet = {
       contract: configs.TOKEN_CONTRACT_HASH,
-      paymentAmount: String(csprToMote(30)),
+      paymentAmount: String(csprToMote(13)),
       key: currentKey,
-      option: side === SideOption.BULL ? "1" : "2"
+      option: side === SideOption.BULL ? 1 : 2
     };
     const deployResult = (await executeDeployWithoutPut(
       buildBettingSideDeploy(dataBet),
       currentKey,
       currentKey,
     )) as SignedDeployResult;
-    console.log(`🚀 ~ onStart ~ deployResult:`, deployResult)
 
-    const { data } = await axios.post(API.startGame(currentKey, side));
+    if (!deployResult.signedDeploy) {
+      console.log(`🚀 ~ onStart ~ deployResult:`, deployResult)
+      return;
+    }
+
+    const { data } = await axios.post(API.startGame(currentKey, side), deployResult.signedDeploy);
     console.log(`🚀 ~ const{data}=awaitaxios.post ~ data:`, data)
   }, [buildBettingSideDeploy, currentKey, dispatch, executeDeployWithoutPut]);
 

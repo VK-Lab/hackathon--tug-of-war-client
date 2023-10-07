@@ -7,8 +7,11 @@ import {
   CasperDashConnector
 } from '@casperdash/usewallet';
 import './App.css'
+import './style.scss';
 import TugOfWarGameContainer from './components/TugOfWar/TugOfWarGameContainer';
 import TugOfWarGame from './components/TugOfWar';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const client = createClient({
   connectors: [
@@ -46,18 +49,16 @@ function App() {
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
 
-  const data = useMemo(() => {
-    if (lastMessage) {
-      const result = JSON.parse(lastMessage.data)
-      console.log(`🚀 ~ data ~ result:`, result)
-      return result.p;
-    }
-    return null;
-  }, [lastMessage]);
+  // const data = useMemo(() => {
+  //   if (lastMessage) {
+  //     const result = JSON.parse(lastMessage.data)
+  //     console.log(`🚀 ~ data ~ result:`, result)
+  //     return result.p;
+  //   }
+  //   return null;
+  // }, [lastMessage]);
 
-  
-
-  console.log(`🚀 ~ App ~ lastMessage:`, lastMessage?.data)
+  // console.log(`🚀 ~ App ~ lastMessage:`, lastMessage?.data)
   // console.log(`🚀 ~ App ~ readyState:`, readyState)
 
   return (

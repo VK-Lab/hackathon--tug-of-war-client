@@ -28,14 +28,14 @@ const CountdownDisplay = ({ isStarted = false, dispatch }: any) => {
     <CountdownCircleTimer
       key={isStarted}
       isPlaying={isStarted}
-      duration={10}
+      duration={3}
       colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
       colorsTime={[10, 6, 3, 0]}
       onComplete={() => {
         dispatch({
           type: "DISABLE_COUNTDOWN"
         })
-        return { shouldRepeat: false, delay: 1, newInitialRemainingTime: 10 }
+        return { shouldRepeat: false, delay: 1, newInitialRemainingTime: 3 }
       }}
     >
       {renderTime}

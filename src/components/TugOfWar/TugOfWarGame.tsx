@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import ConnectButton from "../ConnectButton";
 import { useStore } from "./TugOfWarGameContainer";
 import DisconnectButton from "../DisconnectButton";
@@ -11,18 +10,17 @@ const TugOfWarGame = () => {
   useAccountWallet();
   const [{ currentKey, isStarted }, dispatch] = useStore();
   const { onStart } = useTugOfWar();
-  console.log(`🚀 ~ TugOfWarGame ~ isStarted:`, isStarted);
 
   const onStartGame = async (side: SideOption) => {
     await onStart(side);
   };
-  
+
   if (!currentKey) {
     return (
       <div>
         <ConnectButton />
       </div>
-    )
+    );
   }
 
   return (
@@ -34,13 +32,36 @@ const TugOfWarGame = () => {
         {/* <button disabled={!isStarted} onClick={() => dispatch({ type: "DISABLE_COUNTDOWN"})}>Stop</button> */}
         <CountdownDisplay dispatch={dispatch} isStarted={isStarted} />
         <div>
-          <button disabled={isStarted} onClick={() => onStartGame(SideOption.BULL)}>BULL</button>
-          <button disabled={isStarted} onClick={() => onStartGame(SideOption.BEAR)}>BEAR</button>
+          <button
+            disabled={isStarted}
+            onClick={() => onStartGame(SideOption.BULL)}
+          >
+            BULL
+          </button>
+          <button
+            disabled={isStarted}
+            onClick={() => onStartGame(SideOption.BEAR)}
+          >
+            BEAR
+          </button>
+        </div>
+        <div className="gameview-container">
+          <div className="gameview--left">
+            <div className="point dot">
+              1
+            </div>
+            
+            <div className="progress">
+              <div className="progress-bar" style={{ width: "75%", backgroundColor: "#f2d31b"}}>
+                
+              </div>
+            </div>
+          </div>
+          <div className="gameview--right"></div>
         </div>
       </div>
     </div>
-  )
+  );
 };
-
 
 export default TugOfWarGame;
