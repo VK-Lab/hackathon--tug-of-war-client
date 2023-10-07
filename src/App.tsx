@@ -8,7 +8,7 @@ import {
 } from '@casperdash/usewallet';
 import './App.css'
 import TugOfWarGameContainer from './components/TugOfWar/TugOfWarGameContainer';
-import TugOfWarGame from './components/TugOfWar/TugOfWarGame';
+import TugOfWarGame from './components/TugOfWar';
 
 const client = createClient({
   connectors: [
@@ -68,11 +68,11 @@ function App() {
           <TugOfWarGame />
         </TugOfWarGameContainer>
       </CasperProvider>
-      <div>
+      {/* <div>
         <h3>
           <strong>{data}</strong>
         </h3>
-      </div>
+      </div> */}
       {/* <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
@@ -85,8 +85,6 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-      {/* <button onClick={() => setStarted(true)}>Start</button> */}
-      {/* <button onClick={() => setStarted(false)}>Stop</button> */}
     </>
   )
 }

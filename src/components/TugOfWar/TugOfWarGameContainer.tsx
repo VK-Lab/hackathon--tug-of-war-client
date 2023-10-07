@@ -1,4 +1,4 @@
-import React, { useReducer, useMemo, useContext, useCallback } from "react";
+import React, { useReducer, useMemo, useContext } from "react";
 type TugOfWarGameContext = [
   {
     currentKey: string | null,
@@ -16,7 +16,7 @@ type TugOfWarGameContext = [
   },
   React.Dispatch<any>
 ];
-const TugOfWarGameContext = React.createContext<TugOfWarGameContext>({});
+const TugOfWarGameContext = React.createContext<TugOfWarGameContext>([{ currentKey: null, isStarted: false}, () => {}]);
 const initialState = {
   currentKey: null,
   isStarted: false
